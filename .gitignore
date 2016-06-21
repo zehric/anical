@@ -3,6 +3,6 @@ npm-debug.log
 .DS_Store
 /*.env
 animeid.json
-*.txt
+txt
 airingtimes.json
 token
