@@ -1,4 +1,4 @@
-AniCal
+AnimeCal
 ======
 
     node index.js
