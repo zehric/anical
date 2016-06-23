@@ -18,10 +18,8 @@ var accessToken = function () {
   .then(function (body) {
     return fs.writeFileAsync('token', body.access_token);
   })
-  .catch(function (err) {
-    console.log(err);
-  });
-  exports.mkair();
+  .then(exports)
+  .catch(handle);
 };
 
 var handle = function (err) {
@@ -32,51 +30,52 @@ var handle = function (err) {
   }
 };
 
-module.exports.mkair = function () {
-  var token = '';
+module.exports = function () {
+  var headers = {};
   return fs.readFileAsync('token', 'utf8')
   .then(function (data) {
-    token = data;
+    headers['Authorization'] = 'Bearer ' + data;
     return fs.readFileAsync('animelist.txt', 'utf8');
   })
   .then(function (data) {
     return data.trim().split('\n');
   })
   .map(function (name) {
-    name = name.replace(/[&\/\\#,+()$~%.'"*?<>{}]/g, '');
+    name = encodeURIComponent(name);
     var options = {
-      uri: SERVER + 'anime/search/' + name + '?access_token=' + token,
+      uri: SERVER + 'anime/search/' + name,
+      headers: headers,
       json: true
     };
-    return rp(options)
-    .then(function (body) {
-      var index = 0;
-      if (body.length > 1) {
-        index = -1;
-        console.log(JSON.stringify(body, null, 2));
-        while (index < 0 || index >= body.length) {
-          index = rl.question('Which anime? (0 to ' + (body.length - 1) + '): ');
-        }
+    return rp(options);
+  }).bind([])
+  .map(function (body) {
+    var index = 0;
+    if (body.length > 1) {
+      index = -1;
+      for (let i = 0; i < body.length; i++) {
+        console.log((i + 1) + '. ' + body[i].title_romaji
+                    + ' (' + body[i].type + ')');
       }
-      return [body[index].title_romaji, body[index].id];
-    })
-    .catch(handle);
+      while (index < 0 || index >= body.length) {
+        index = rl.question('Which anime? ') - 1;
+      }
+    }
+    this.push(body[index].title_romaji);
+    return body[index].id;
   })
-  .map(function (animeid) {
+  .map(function (id) {
     var options = {
-      uri: SERVER + 'anime/' + animeid[1] + '/airing?access_token=' + token,
+      uri: SERVER + 'anime/' + id + '/airing',
+      headers: headers,
       json: true
     };
-    return rp(options)
-    .then(function (body) {
-      return [animeid[0], body];
-    })
-    .catch(handle);
+    return rp(options);
   })
-  .then(function (times) {
+  .then(function (body) {
     var airingtimes = {};
-    for (let time of times) {
-      airingtimes[time[0]] = time[1];
+    for (let i = 0; i < this.length; i++) {
+      airingtimes[this[i]] = body[i];
     }
     return fs.writeFileAsync('airingtimes.json',
                              JSON.stringify(airingtimes, null, 2));

@@ -1,14 +1,12 @@
 "use strict";
 const fs = require('fs');
-const airing = require('./airing').mkair;
+const airing = require('./airing');
 const moment = require('moment');
 
 var cal = function() {
   fs.readFile('./airingtimes.json', 'utf8', function (err, data) {
     if (err && err.code === 'ENOENT') {
-      airing().then(function () {
-        cal();
-      })
+      airing().then(cal);
     } else {
       var calendar = {};
       var anime = JSON.parse(data);
@@ -26,15 +24,14 @@ var cal = function() {
           }
         }
       }
-      console.log(JSON.stringify(calendar, null, 2).replace(/\"/g, ""));
+      console.log(JSON.stringify(calendar, null, 2)
+      .replace(/[\",\\[.*?\]{}]/g, ""));
     }
   });
 };
 var args = process.argv;
 if (args.length > 2 && args[2] === '-r') {
-  airing().then(function () {
-    cal();
-  });
+  airing().then(cal);
 } else {
   cal();
 }
