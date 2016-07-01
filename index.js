@@ -10,7 +10,7 @@ var cal = function() {
     } else {
       var calendar = {};
       var anime = JSON.parse(data);
-      for (let i = -7; i < 6; i++) {
+      for (let i = -7; i < 7; i++) {
         calendar[moment().add(i, 'days').format('dddd, YYYY-MM-DD')] = [];
       }
       var now = moment();
@@ -18,7 +18,7 @@ var cal = function() {
         for (let episode in anime[name]) {
           var time = moment.unix(anime[name][episode]);
           var difference = time.diff(now, 'days');
-          if (difference > -7 && difference < 6) {
+          if (difference > -7 && difference < 7) {
             calendar[time.format('dddd, YYYY-MM-DD')].push(time.format('hh:mm')
               + ' | ' + name + ' <EP. ' + episode + '>');
           }

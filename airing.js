@@ -8,33 +8,16 @@ const SERVER = 'https://anilist.co/api/';
 const CLIENT_ID = 'threwqu-o482l';
 const SECRET = 'iznV7NsFRZ0EogAP9YMKJMy';
 
-var accessToken = function () {
-  var options = {
+module.exports = function () {
+  var headers = {};
+  var tokenOptions = {
     uri: SERVER + 'auth/access_token?grant_type=client_credentials&client_id='
          + CLIENT_ID + '&client_secret=' + SECRET,
     json: true
   };
-  rp.post(options)
+  return rp.post(tokenOptions)
   .then(function (body) {
-    return fs.writeFileAsync('token', body.access_token);
-  })
-  .then(exports)
-  .catch(handle);
-};
-
-var handle = function (err) {
-  if (err.code === 'ENOENT' || err.statusCode == 401) {
-    accessToken();
-  } else {
-    console.log(err);
-  }
-};
-
-module.exports = function () {
-  var headers = {};
-  return fs.readFileAsync('token', 'utf8')
-  .then(function (data) {
-    headers['Authorization'] = 'Bearer ' + data;
+    headers['Authorization'] = 'Bearer ' + body.access_token;
     return fs.readFileAsync('animelist.txt', 'utf8');
   })
   .then(function (data) {
@@ -80,5 +63,7 @@ module.exports = function () {
     return fs.writeFileAsync('airingtimes.json',
                              JSON.stringify(airingtimes, null, 2));
   })
-  .catch(handle);
+  .catch(function (err) {
+    console.log(err);
+  });
 };
