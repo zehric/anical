@@ -1,5 +1,5 @@
 AnimeCal
-======
+========
 
 Pulls anime information from [anilist](https://anilist-api.readthedocs.io/en/latest/)
 
