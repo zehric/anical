@@ -12,3 +12,5 @@ anime listed in animelist.txt in the same directory.
 Use the -r flag to repull info from server, if you need to after a change:
 
 > `node index.js -r`
+
+[![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
