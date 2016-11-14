@@ -2,7 +2,6 @@
 npm-debug.log
 .DS_Store
 /*.env
-animeid.json
 txt
 airingtimes.json
-token
+animelist.json

@@ -2,16 +2,16 @@
   "name": "anical",
   "version": "1.0.0",
   "description": "An anime calendar",
-  "main": "index.js",
+  "main": "main.js",
   "dependencies": {
+    "electron": "^1.4.6",
     "moment": "^2.13.0",
     "readline-sync": "^1.4.4",
     "request-promise": "^3.0.0"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
@@ -26,5 +26,5 @@
   "bugs": {
     "url": "https://github.com/zehric/anical/issues"
   },
-  "homepage": "https://github.com/zehric/anical#readme"
+  "homepage": "https://github.com/zehric/anical"
 }
