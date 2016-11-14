@@ -3,14 +3,6 @@ AniCal
 
 Pulls anime information from [anilist](https://anilist-api.readthedocs.io/en/latest/)
 
-> `node index.js`
-or
-
-> `npm start`
-to run the program. Will display a week before and after the current date of
-anime listed in animelist.txt in the same directory.
-Use the -r flag to repull info from server, if you need to after a change:
-
-> `node index.js -r`
+Search for anime, add or delete, then save changes and show calendar.
 
 [![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
